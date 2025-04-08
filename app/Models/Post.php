@@ -10,7 +10,8 @@ class Post extends Model
         'title',
         'content',
         'user_id',
-        'category_id'
+        'category_id',
+        'image_path'
     ];
 
     public function user()
@@ -31,5 +32,14 @@ class Post extends Model
     public function allComments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function getImageUrlAttribute()
+    {
+        if ($this->image_path) {
+            return asset('storage/' . $this->image_path);
+        }
+        
+        return null;
     }
 } 

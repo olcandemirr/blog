@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Category;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -20,7 +21,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with('user')->latest()->get();
+        $posts = Post::with(['user', 'category'])->latest()->get();
         return view('posts.index', compact('posts'));
     }
 
@@ -46,12 +47,22 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|min:3|max:255',
             'content' => 'required|min:10',
-            'category_id' => 'required|exists:categories,id'
+            'category_id' => 'required|exists:categories,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        $post = new Post($request->all());
-        $post->user_id = auth()->id();
-        $post->save();
+        $data = $request->only(['title', 'content', 'category_id']);
+        $data['user_id'] = auth()->id();
+
+        // Handle Image Upload
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $filename = time() . '_' . $image->getClientOriginalName();
+            $path = $image->storeAs('posts', $filename, 'public');
+            $data['image_path'] = $path;
+        }
+
+        Post::create($data);
 
         return redirect()->route('posts.index')
             ->with('success', 'Post created successfully.');
@@ -96,9 +107,32 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|min:3|max:255',
             'content' => 'required|min:10',
+            'category_id' => 'required|exists:categories,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        $post->update($request->all());
+        $data = $request->only(['title', 'content', 'category_id']);
+
+        // Handle Image Upload
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($post->image_path) {
+                Storage::disk('public')->delete($post->image_path);
+            }
+            
+            $image = $request->file('image');
+            $filename = time() . '_' . $image->getClientOriginalName();
+            $path = $image->storeAs('posts', $filename, 'public');
+            $data['image_path'] = $path;
+        }
+
+        // Handle Image Removal
+        if ($request->has('remove_image') && $post->image_path) {
+            Storage::disk('public')->delete($post->image_path);
+            $data['image_path'] = null;
+        }
+
+        $post->update($data);
 
         return redirect()->route('posts.index')
             ->with('success', 'Post updated successfully');
@@ -113,6 +147,11 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $this->authorize('delete', $post);
+        
+        // Delete image if exists
+        if ($post->image_path) {
+            Storage::disk('public')->delete($post->image_path);
+        }
         
         $post->delete();
 

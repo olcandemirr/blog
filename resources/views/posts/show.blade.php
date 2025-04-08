@@ -32,6 +32,16 @@
                             </div>
                         </div>
                     </div>
+                    
+                    @if($post->image_path)
+                        <div class="mb-4 text-center">
+                            <img src="{{ $post->image_url }}" 
+                                 alt="{{ $post->title }}" 
+                                 class="img-fluid rounded" 
+                                 style="max-height: 400px;">
+                        </div>
+                    @endif
+                    
                     <div class="card-text">
                         {!! nl2br(e($post->content)) !!}
         </div>
