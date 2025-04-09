@@ -31,3 +31,6 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/search/autocomplete', [SearchController::class, 'autocomplete'])->name('search.autocomplete');
+
+// TinyMCE Image Upload Route
+Route::post('/tinymce/upload', [PostController::class, 'uploadImage'])->name('tinymce.upload')->middleware('auth');

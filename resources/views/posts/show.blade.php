@@ -43,10 +43,12 @@
                     @endif
                     
                     <div class="card-text">
-                        {!! nl2br(e($post->content)) !!}
+                        {!! $post->content !!}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
             <!-- Comments Section -->
             <div class="card">

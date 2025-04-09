@@ -33,7 +33,7 @@
                         </a>
                     </div>
                     <h5 class="card-title">{{ $post->title }}</h5>
-                    <p class="card-text">{{ Str::limit($post->content, 100) }}</p>
+                    <p class="card-text">{{ Str::limit(strip_tags($post->content), 100) }}</p>
                 </div>
                 
                 <div class="card-footer bg-white">

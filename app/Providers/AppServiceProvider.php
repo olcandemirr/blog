@@ -23,6 +23,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // HTML sanitize için helper fonksiyon
+        if (!function_exists('clean')) {
+            function clean($html)
+            {
+                return \Purifier::clean($html);
+            }
+        }
     }
 }

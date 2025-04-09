@@ -24,6 +24,7 @@
             color: #6c757d;
         }
     </style>
+    @yield('styles')
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -118,5 +119,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @stack('scripts')
+    @yield('scripts')
 </body>
 </html> 

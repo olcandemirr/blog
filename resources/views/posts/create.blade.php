@@ -1,9 +1,13 @@
 @extends('layouts.app')
 
+@section('styles')
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+@endsection
+
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-8 offset-md-2">
+        <div class="col-md-10 offset-md-1">
             <div class="card">
                 <div class="card-header">
                     <h1 class="h4 mb-0">Create New Post</h1>
@@ -60,11 +64,10 @@
 
                         <div class="mb-3">
                             <label for="content" class="form-label">Content</label>
-                            <textarea class="form-control @error('content') is-invalid @enderror" 
+                            <textarea class="form-control tinymce-editor @error('content') is-invalid @enderror" 
                                       id="content" 
                                       name="content" 
-                                      rows="10" 
-                                      required>{{ old('content') }}</textarea>
+                                      rows="10">{{ old('content') }}</textarea>
                             @error('content')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -80,4 +83,21 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    tinymce.init({
+        selector: '.tinymce-editor',
+        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+        toolbar: 'undo redo | blocks | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        menubar: false,
+        height: 400,
+        setup: function (editor) {
+            editor.on('change', function () {
+                editor.save();
+            });
+        }
+    });
+</script>
 @endsection 

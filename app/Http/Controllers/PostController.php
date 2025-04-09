@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
+use Purifier;
 
 class PostController extends Controller
 {
@@ -46,13 +47,17 @@ class PostController extends Controller
     {
         $request->validate([
             'title' => 'required|min:3|max:255',
-            'content' => 'required|min:10',
+            'content' => 'required',
             'category_id' => 'required|exists:categories,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        $data = $request->only(['title', 'content', 'category_id']);
-        $data['user_id'] = auth()->id();
+        $data = [
+            'title' => $request->title,
+            'content' => clean($request->content), // HTML temizleme
+            'category_id' => $request->category_id,
+            'user_id' => auth()->id()
+        ];
 
         // Handle Image Upload
         if ($request->hasFile('image')) {
@@ -106,12 +111,16 @@ class PostController extends Controller
 
         $request->validate([
             'title' => 'required|min:3|max:255',
-            'content' => 'required|min:10',
+            'content' => 'required',
             'category_id' => 'required|exists:categories,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        $data = $request->only(['title', 'content', 'category_id']);
+        $data = [
+            'title' => $request->title,
+            'content' => clean($request->content), // HTML temizleme
+            'category_id' => $request->category_id
+        ];
 
         // Handle Image Upload
         if ($request->hasFile('image')) {
@@ -134,7 +143,7 @@ class PostController extends Controller
 
         $post->update($data);
 
-        return redirect()->route('posts.index')
+        return redirect()->route('posts.show', $post)
             ->with('success', 'Post updated successfully');
     }
 
@@ -157,5 +166,20 @@ class PostController extends Controller
 
         return redirect()->route('posts.index')
             ->with('success', 'Post deleted successfully');
+    }
+
+    public function uploadImage(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $file = $request->file('file');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $path = $file->storeAs('uploads', $filename, 'public');
+
+        return response()->json([
+            'location' => asset('storage/' . $path)
+        ]);
     }
 }
