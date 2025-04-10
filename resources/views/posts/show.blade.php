@@ -21,16 +21,31 @@
                         @endcan
                     </div>
                     <div class="d-flex align-items-center mb-3">
-                        <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">
-                            {{ substr($post->user->name, 0, 1) }}
-                        </div>
+                        <a href="{{ route('profile.show', $post->user) }}" class="text-decoration-none">
+                            <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">
+                                {{ substr($post->user->name, 0, 1) }}
+                            </div>
+                        </a>
                         <div>
-                            <div class="fw-bold">{{ $post->user->name }}</div>
+                            <a href="{{ route('profile.show', $post->user) }}" class="fw-bold text-decoration-none">{{ $post->user->name }}</a>
                             <div class="text-muted small">
                                 Posted in <a href="{{ route('categories.show', $post->category) }}" class="text-decoration-none">{{ $post->category->name }}</a> • 
                                 {{ $post->created_at->diffForHumans() }}
                             </div>
                         </div>
+                    </div>
+                    
+                    <!-- Beğeni butonu ve sayacı -->
+                    <div class="d-flex align-items-center mb-4">
+                        <form action="{{ route('posts.like', $post) }}" method="POST" id="like-form">
+                            @csrf
+                            <button type="submit" class="btn {{ $post->isLikedByUser() ? 'btn-danger' : 'btn-outline-danger' }}" id="like-button">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart{{ $post->isLikedByUser() ? '-fill' : '' }}" viewBox="0 0 16 16">
+                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                                </svg>
+                                <span id="likes-count">{{ $post->likes()->count() }}</span> {{ Str::plural('Like', $post->likes()->count()) }}
+                            </button>
+                        </form>
                     </div>
                     
                     @if($post->image_path)
@@ -220,6 +235,50 @@ function toggleReplyForm(commentId) {
     const form = document.getElementById(`reply-form-${commentId}`);
     form.classList.toggle('d-none');
 }
+
+// Like AJAX işlemi
+document.addEventListener('DOMContentLoaded', function() {
+    const likeForm = document.getElementById('like-form');
+    const likeButton = document.getElementById('like-button');
+    const likesCount = document.getElementById('likes-count');
+    
+    if (likeForm) {
+        likeForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            fetch(likeForm.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Güncellenen beğeni sayısını göster
+                    likesCount.textContent = data.likesCount;
+                    
+                    // Buton stilini güncelle
+                    if (data.liked) {
+                        likeButton.classList.remove('btn-outline-danger');
+                        likeButton.classList.add('btn-danger');
+                        likeButton.querySelector('svg').classList.add('bi-heart-fill');
+                        likeButton.querySelector('svg').classList.remove('bi-heart');
+                    } else {
+                        likeButton.classList.add('btn-outline-danger');
+                        likeButton.classList.remove('btn-danger');
+                        likeButton.querySelector('svg').classList.remove('bi-heart-fill');
+                        likeButton.querySelector('svg').classList.add('bi-heart');
+                    }
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    }
+});
 </script>
 @endpush
 @endsection 

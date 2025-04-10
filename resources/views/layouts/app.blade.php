@@ -63,6 +63,65 @@
                     </form>
                 </div>
 
+                @auth
+                    <li class="nav-item dropdown me-3">
+                        <a class="nav-link position-relative" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
+                                <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+                            </svg>
+                            @if(Auth::user()->unreadNotifications->count() > 0)
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ Auth::user()->unreadNotifications->count() > 99 ? '99+' : Auth::user()->unreadNotifications->count() }}
+                                </span>
+                            @endif
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" style="width: 320px;" aria-labelledby="notificationsDropdown">
+                            <li><h6 class="dropdown-header">Notifications</h6></li>
+                            
+                            @if(Auth::user()->notifications->isEmpty())
+                                <li><span class="dropdown-item text-muted">No notifications</span></li>
+                            @else
+                                @foreach(Auth::user()->notifications->take(5) as $notification)
+                                    <li>
+                                        <a class="dropdown-item {{ $notification->read_at ? '' : 'bg-light' }}" href="{{ 
+                                            $notification->type == 'App\Notifications\NewCommentNotification' 
+                                                ? route('posts.show', $notification->data['post_id']) . '#comment-' . $notification->data['comment_id'] 
+                                                : route('posts.show', $notification->data['post_id']) . '#comment-' . $notification->data['reply_id'] 
+                                        }}">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <small class="mb-1">
+                                                    @if($notification->type == 'App\Notifications\NewCommentNotification')
+                                                        <strong>{{ $notification->data['user_name'] }}</strong> commented on your post
+                                                    @elseif($notification->type == 'App\Notifications\CommentReplyNotification')
+                                                        <strong>{{ $notification->data['user_name'] }}</strong> replied to your comment
+                                                    @endif
+                                                </small>
+                                                <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
+                                            </div>
+                                        </a>
+                                    </li>
+                                @endforeach
+                                
+                                <li><hr class="dropdown-divider"></li>
+                                <li class="text-center">
+                                    <a href="{{ route('notifications.index') }}" class="dropdown-item">View All</a>
+                                </li>
+                                
+                                @if(Auth::user()->unreadNotifications->count() > 0)
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li class="text-center">
+                                        <form action="{{ route('notifications.markAllAsRead') }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="dropdown-item text-primary">Mark All as Read</button>
+                                        </form>
+                                    </li>
+                                @endif
+                            @endif
+                        </ul>
+                    </li>
+                @endauth
+
                 <ul class="navbar-nav ms-auto">
                     @guest
                         <li class="nav-item">
@@ -77,6 +136,18 @@
                                 {{ Auth::user()->name }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a href="{{ route('profile.edit') }}" class="dropdown-item">Profile</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('profile.posts') }}" class="dropdown-item">My Posts</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('likes.posts') }}" class="dropdown-item">Liked Posts</a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
                                 <li>
                                     <form action="{{ route('logout') }}" method="POST">
                                         @csrf
