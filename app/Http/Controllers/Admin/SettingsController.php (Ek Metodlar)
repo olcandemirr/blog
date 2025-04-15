@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
+class SettingsController extends Controller
+{
+    /**
+     * Generate sitemap.xml file
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function generateSitemap()
+    {
+        try {
+            \Artisan::call('sitemap:generate');
+            
+            log_activity(
+                'Admin generated sitemap',
+                null,
+                ['
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Sitemap oluşturulurken bir hata oluştu: ' . $e->getMessage());
+        }
+    }
+} 

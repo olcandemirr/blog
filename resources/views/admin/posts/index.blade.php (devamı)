@@ -1,0 +1,46 @@
+                            <td>
+                                <a href="{{ route('admin.users.edit', $post->user) }}">
+                                    {{ $post->user->name }}
+                                </a>
+                            </td>
+                            <td>
+                                <span class="badge bg-primary">
+                                    {{ $post->category->name }}
+                                </span>
+                            </td>
+                            <td>{{ $post->likes_count }}</td>
+                            <td>{{ $post->comments_count }}</td>
+                            <td>{{ $post->created_at->format('Y-m-d') }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{{ route('posts.show', $post) }}" target="_blank" class="btn btn-sm btn-info">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{{ route('admin.posts.edit', $post) }}" class="btn btn-sm btn-primary">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form action="{{ route('admin.posts.destroy', $post) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this post?')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="8" class="text-center">No posts found</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-end">
+                {{ $posts->links() }}
+            </div>
+        </div>
+    </div>
+</div>
+@endsection 

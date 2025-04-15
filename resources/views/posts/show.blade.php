@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <div class="row">
+<div class="row">
         <div class="col-md-8 offset-md-2">
             <!-- Post Content -->
             <div class="card mb-4">
@@ -13,11 +13,11 @@
                         <div class="btn-group">
                             <a href="{{ route('posts.edit', $post) }}" class="btn btn-sm btn-outline-primary">Edit</a>
                             <form action="{{ route('posts.destroy', $post) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
+                    @csrf
+                    @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-outline-danger ms-2" onclick="return confirm('Are you sure you want to delete this post?')">Delete</button>
-                            </form>
-                        </div>
+                </form>
+            </div>
                         @endcan
                     </div>
                     <div class="d-flex align-items-center mb-3">
@@ -31,10 +31,10 @@
                             <div class="text-muted small">
                                 Posted in <a href="{{ route('categories.show', $post->category) }}" class="text-decoration-none">{{ $post->category->name }}</a> • 
                                 {{ $post->created_at->diffForHumans() }}
-                            </div>
-                        </div>
-                    </div>
-                    
+        </div>
+    </div>
+</div>
+
                     <!-- Beğeni butonu ve sayacı -->
                     <div class="d-flex align-items-center mb-4">
                         <form action="{{ route('posts.like', $post) }}" method="POST" id="like-form">
@@ -93,8 +93,8 @@
                     <!-- Comments List -->
                     @forelse($post->comments()->with(['user', 'replies.user'])->whereNull('parent_id')->latest()->get() as $comment)
                         <div class="comment mb-4" id="comment-{{ $comment->id }}">
-                            <div class="card">
-                                <div class="card-body">
+        <div class="card">
+            <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start">
                                         <div class="d-flex align-items-center">
                                             <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">

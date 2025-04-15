@@ -1,0 +1,21 @@
+<meta property="og:title" content="{{ isset($title) ? str_replace(['%title%', '%site_title%'], [$title, $siteTitle], $ogTitle) : $siteTitle }}">
+<meta property="og:description" content="{{ isset($description) ? $description : $ogDescription }}">
+@if($ogImage)
+<meta property="og:image" content="{{ asset('storage/' . $ogImage) }}">
+@elseif(isset($imageUrl))
+<meta property="og:image" content="{{ $imageUrl }}">
+@endif
+<meta property="og:site_name" content="{{ $siteTitle }}">
+
+{{-- Twitter --}}
+<meta name="twitter:card" content="{{ $twitterCard }}">
+@if($twitterSite)
+<meta name="twitter:site" content="{{ $twitterSite }}">
+@endif
+<meta name="twitter:title" content="{{ isset($title) ? str_replace(['%title%', '%site_title%'], [$title, $siteTitle], $ogTitle) : $siteTitle }}">
+<meta name="twitter:description" content="{{ isset($description) ? $description : $ogDescription }}">
+@if($ogImage)
+<meta name="twitter:image" content="{{ asset('storage/' . $ogImage) }}">
+@elseif(isset($imageUrl))
+<meta name="twitter:image" content="{{ $imageUrl }}">
+@endif 
