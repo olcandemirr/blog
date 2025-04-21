@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\FeedController;
 
 /*
 |--------------------------------------------------------------------------
@@ -95,3 +96,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::post('/settings/generate-sitemap', [SettingsController::class, 'generateSitemap'])->name('settings.generate.sitemap');
     Route::post('/settings/update-robots-txt', [SettingsController::class, 'updateRobotsTxt'])->name('settings.update.robots');
 });
+
+// RSS Feed Routes
+Route::get('/feed', [FeedController::class, 'index'])->name('feeds.index');
+Route::get('/feed/category/{category:slug}', [FeedController::class, 'category'])->name('feeds.category');
+Route::get('/feeds', [FeedController::class, 'list'])->name('feeds.list');

@@ -11,6 +11,35 @@
         </div>
     </div>
 
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5>RSS Feeds</h5>
+                </div>
+                <div class="card-body">
+                    <p>Subscribe to our RSS feeds to get the latest updates:</p>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            All Posts
+                            <a href="{{ route('feeds.index') }}" class="btn btn-sm btn-outline-danger" target="_blank">
+                                <i class="bi bi-rss"></i> Subscribe
+                            </a>
+                        </li>
+                        @foreach($categories as $category)
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ $category->name }}
+                            <a href="{{ route('feeds.category', $category) }}" class="btn btn-sm btn-outline-danger" target="_blank">
+                                <i class="bi bi-rss"></i> Subscribe
+                            </a>
+                        </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         @foreach($categories as $category)
         <div class="col-md-4 mb-4">

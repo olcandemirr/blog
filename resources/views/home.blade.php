@@ -40,6 +40,17 @@
     </div>
 </div>
 
+<!-- Add this near the top of the page, perhaps after the hero section -->
+<div class="bg-white py-4 border-bottom">
+    <div class="container">
+        <div class="d-flex justify-content-end">
+            <a href="{{ route('feeds.index') }}" class="btn btn-sm btn-outline-danger" target="_blank">
+                <i class="bi bi-rss"></i> Subscribe to RSS Feed
+            </a>
+        </div>
+    </div>
+</div>
+
 <!-- Popular Categories Section -->
 <div class="bg-gray-50 py-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
