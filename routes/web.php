@@ -79,6 +79,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/categories/{category}/edit', [AdminCategoryController::class, 'edit'])->name('categories.edit');
     Route::put('/categories/{category}', [AdminCategoryController::class, 'update'])->name('categories.update');
     Route::delete('/categories/{category}', [AdminCategoryController::class, 'destroy'])->name('categories.destroy');
+    Route::get('/categories/stats', [AdminCategoryController::class, 'stats'])->name('categories.stats');
     
     // Comments
     Route::get('/comments', [AdminCommentController::class, 'index'])->name('comments.index');
