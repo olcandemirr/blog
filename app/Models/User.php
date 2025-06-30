@@ -21,12 +21,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'avatar',
+        'avatar_path',
         'bio',
         'website',
         'social_facebook',
         'social_twitter',
         'social_instagram',
+        'is_admin',
     ];
 
     /**
@@ -70,8 +71,8 @@ class User extends Authenticatable
 
     public function getAvatarUrlAttribute()
     {
-        if ($this->avatar) {
-            return asset('storage/' . $this->avatar);
+        if ($this->avatar_path) {
+            return asset('storage/' . $this->avatar_path);
         }
         
         return 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=random';
