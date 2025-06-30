@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Setting;
+use App\Models\ActivityLog;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Artisan;
 
@@ -76,11 +77,12 @@ class SettingsController extends Controller
         
         // Aktivite logu tut
         if (!empty($changedSettings)) {
-            log_activity(
-                'Admin updated ' . $group . ' settings',
-                null,
-                ['changes' => $changedSettings, 'group' => $group, 'admin_id' => auth()->id()]
-            );
+            ActivityLog::create([
+                'user_id' => auth()->id(),
+                'log_name' => 'default',
+                'description' => 'Admin updated ' . $group . ' settings',
+                'properties' => collect(['changes' => $changedSettings, 'group' => $group, 'admin_id' => auth()->id()]),
+            ]);
         }
         
         // SEO ayarları değiştiyse, çeşitli işlemler yapılabilir
@@ -103,5 +105,66 @@ class SettingsController extends Controller
         
         return redirect()->route('admin.settings.index', ['group' => $group])
             ->with('success', 'Settings updated successfully.');
+    }
+    
+    /**
+     * Generate sitemap.xml file
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function generateSitemap()
+    {
+        try {
+            Artisan::call('sitemap:generate');
+            
+            ActivityLog::create([
+                'user_id' => auth()->id(),
+                'log_name' => 'default',
+                'description' => 'Admin generated sitemap.xml',
+                'properties' => collect(['admin_id' => auth()->id()]),
+            ]);
+            
+            return redirect()->route('admin.settings.index', ['group' => 'seo'])
+                ->with('success', 'Sitemap generated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.settings.index', ['group' => 'seo'])
+                ->with('error', 'Failed to generate sitemap: ' . $e->getMessage());
+        }
+    }
+    
+    /**
+     * Update robots.txt file
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateRobotsTxt(Request $request)
+    {
+        $request->validate([
+            'robots_content' => 'required|string'
+        ]);
+        
+        try {
+            $oldContent = file_get_contents(public_path('robots.txt'));
+            $content = $request->input('robots_content');
+            file_put_contents(public_path('robots.txt'), $content);
+            
+            ActivityLog::create([
+                'user_id' => auth()->id(),
+                'log_name' => 'default',
+                'description' => 'Admin updated robots.txt',
+                'properties' => collect([
+                    'admin_id' => auth()->id(),
+                    'old_content' => $oldContent,
+                    'new_content' => $content
+                ]),
+            ]);
+            
+            return redirect()->route('admin.settings.index', ['group' => 'seo'])
+                ->with('success', 'robots.txt updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.settings.index', ['group' => 'seo'])
+                ->with('error', 'Failed to update robots.txt: ' . $e->getMessage());
+        }
     }
 } 

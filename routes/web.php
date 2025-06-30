@@ -16,11 +16,8 @@ use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\SettingsController;
-<<<<<<< HEAD
 use App\Http\Controllers\ProfileController;
-=======
 use App\Http\Controllers\FeedController;
->>>>>>> 8a6da4b03aeac32a4b758e6312add93c0e689c94
 
 /*
 |--------------------------------------------------------------------------
@@ -111,13 +108,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::post('/settings/update-robots-txt', [SettingsController::class, 'updateRobotsTxt'])->name('settings.update.robots');
 });
 
-<<<<<<< HEAD
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-=======
+
 // RSS Feed Routes
 Route::get('/feed', [FeedController::class, 'index'])->name('feeds.index');
 Route::get('/feed/category/{category:slug}', [FeedController::class, 'category'])->name('feeds.category');
 Route::get('/feeds', [FeedController::class, 'list'])->name('feeds.list');
->>>>>>> 8a6da4b03aeac32a4b758e6312add93c0e689c94

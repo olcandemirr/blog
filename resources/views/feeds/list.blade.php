@@ -1,72 +1,56 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container py-5">
-    <div class="row">
-        <div class="col-12">
-            <h1>RSS Feeds</h1>
-            <p class="lead">Subscribe to our RSS feeds to stay updated with the latest content.</p>
-        </div>
-    </div>
-
-    <div class="row mt-4">
+<div class="container">
+    <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header bg-light">
-                    <h5>Available Feeds</h5>
+                <div class="card-header">
+                    <h4 class="mb-0">{{ __('RSS Feeds') }}</h4>
                 </div>
+
                 <div class="card-body">
-                    <div class="list-group">
-                        <div class="list-group-item">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">All Posts</h5>
-                                <a href="{{ route('feeds.index') }}" class="btn btn-outline-danger" target="_blank">
-                                    <i class="bi bi-rss"></i> Subscribe
-                                </a>
-                            </div>
-                            <p class="mb-1">Get all the latest posts published on our platform.</p>
-                            <small class="text-muted">Updated with every new post</small>
+                    <p>Subscribe to our RSS feeds to stay updated with the latest content.</p>
+                    
+                    <h5 class="mt-4">Main Feed</h5>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="me-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-rss text-warning" viewBox="0 0 16 16">
+                                <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                <path d="M5.5 12a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm-3-8.5a1 1 0 0 1 1-1c5.523 0 10 4.477 10 10a1 1 0 1 1-2 0 8 8 0 0 0-8-8 1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1 6 6 0 0 1 6 6 1 1 0 1 1-2 0 4 4 0 0 0-4-4 1 1 0 0 1-1-1z"/>
+                            </svg>
                         </div>
-                        
-                        @foreach($categories as $category)
-                        <div class="list-group-item">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">{{ $category->name }}</h5>
-                                <a href="{{ route('feeds.category', $category) }}" class="btn btn-outline-danger" target="_blank">
-                                    <i class="bi bi-rss"></i> Subscribe
-                                </a>
-                            </div>
-                            <p class="mb-1">{{ $category->description }}</p>
-                            <small class="text-muted">{{ $category->posts_count }} posts in this category</small>
+                        <div>
+                            <a href="{{ route('feeds.index') }}" class="text-decoration-none">All Posts Feed</a>
+                            <p class="text-muted small mb-0">Latest posts from all categories</p>
                         </div>
-                        @endforeach
                     </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header bg-light">
-                    <h5>About RSS Feeds</h5>
-                </div>
-                <div class="card-body">
-                    <p>RSS (Really Simple Syndication) allows you to subscribe to updates from websites you care about.</p>
                     
-                    <h6 class="mt-3">How to use RSS feeds:</h6>
-                    <ol>
-                        <li>Choose an RSS reader app or service</li>
-                        <li>Copy the feed URL from one of our feeds</li>
-                        <li>Add the feed URL to your RSS reader</li>
-                        <li>Get automatic updates when new content is published</li>
-                    </ol>
+                    @if($categories->count() > 0)
+                        <h5 class="mt-4">Category Feeds</h5>
+                        @foreach($categories as $category)
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="me-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-rss text-warning" viewBox="0 0 16 16">
+                                        <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                                        <path d="M5.5 12a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm-3-8.5a1 1 0 0 1 1-1c5.523 0 10 4.477 10 10a1 1 0 1 1-2 0 8 8 0 0 0-8-8 1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1 6 6 0 0 1 6 6 1 1 0 1 1-2 0 4 4 0 0 0-4-4 1 1 0 0 1-1-1z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <a href="{{ route('feeds.category', $category->slug) }}" class="text-decoration-none">{{ $category->name }} Feed</a>
+                                    <p class="text-muted small mb-0">{{ $category->posts_count }} posts</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endif
                     
-                    <h6 class="mt-3">Popular RSS Readers:</h6>
+                    <h5 class="mt-4">How to Use RSS Feeds</h5>
+                    <p>You can subscribe to these feeds using any RSS reader. Here are some popular options:</p>
                     <ul>
-                        <li>Feedly</li>
-                        <li>Inoreader</li>
-                        <li>NewsBlur</li>
-                        <li>The Old Reader</li>
+                        <li><a href="https://feedly.com" target="_blank" rel="noopener noreferrer">Feedly</a></li>
+                        <li><a href="https://www.inoreader.com" target="_blank" rel="noopener noreferrer">Inoreader</a></li>
+                        <li><a href="https://newsblur.com" target="_blank" rel="noopener noreferrer">NewsBlur</a></li>
+                        <li>Browser extensions for Firefox, Chrome, or Safari</li>
                     </ul>
                 </div>
             </div>

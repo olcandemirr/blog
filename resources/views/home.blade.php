@@ -2,152 +2,126 @@
 
 @section('content')
 <!-- Hero Section -->
-<div class="relative bg-gray-900 overflow-hidden">
-    <div class="max-w-7xl mx-auto">
-        <div class="relative z-10 pb-8 bg-gray-900 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
-            <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
-                <div class="sm:text-center lg:text-left">
-                    <h1 class="text-4xl tracking-tight font-extrabold text-white sm:text-5xl md:text-6xl">
-                        <span class="block">Welcome to</span>
-                        <span class="block text-indigo-600">Your Blog Platform</span>
-                    </h1>
-                    <p class="mt-3 text-base text-gray-300 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                        Share your thoughts, ideas, and stories with the world. Join our community of writers and readers.
-                    </p>
-                    <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                        @auth
-                            <div class="rounded-md shadow">
-                                <a href="{{ route('posts.create') }}" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10">
-                                    Create New Post
-                                </a>
-                            </div>
-                        @else
-                            <div class="rounded-md shadow">
-                                <a href="{{ route('register') }}" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10">
-                                    Get Started
-                                </a>
-                            </div>
-                        @endauth
-                        <div class="mt-3 sm:mt-0 sm:ml-3">
-                            <a href="{{ route('posts.index') }}" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
-                                View All Posts
-                            </a>
-                        </div>
-                    </div>
+<div class="bg-primary position-relative overflow-hidden p-5 mb-5">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <h1 class="display-4 fw-bold text-white mb-3">
+                    Welcome to {{ config('app.name', 'Laravel Blog') }}
+                </h1>
+                <p class="lead text-white-50 mb-4">
+                    Share your thoughts, ideas, and stories with the world. Join our community of writers and readers.
+                </p>
+                <div class="d-flex flex-column flex-sm-row gap-2">
+                    @auth
+                        <a href="{{ route('posts.create') }}" class="btn btn-light btn-lg px-4">
+                            <i class="fas fa-pen-to-square me-2"></i>Create New Post
+                        </a>
+                    @else
+                        <a href="{{ route('register') }}" class="btn btn-light btn-lg px-4">
+                            <i class="fas fa-user-plus me-2"></i>Get Started
+                        </a>
+                    @endauth
+                    <a href="{{ route('posts.index') }}" class="btn btn-outline-light btn-lg px-4">
+                        <i class="fas fa-list-ul me-2"></i>View All Posts
+                    </a>
                 </div>
-            </main>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="https://placehold.co/600x400/3b82f6/FFFFFF?text=Blog+Platform" alt="Blog Platform" class="img-fluid rounded shadow-lg" style="max-height: 400px;">
+            </div>
         </div>
+    </div>
+    <div class="position-absolute bottom-0 end-0 d-none d-lg-block">
+        <svg width="350" height="350" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="opacity: 0.1;">
+            <path fill="#FFFFFF" d="M41.3,-70.9C54.4,-64.3,66.5,-55.3,73.8,-42.9C81.1,-30.6,83.5,-15.3,83.2,-0.2C82.9,14.9,79.8,29.9,72.3,42.3C64.8,54.8,52.8,64.8,39.5,70.8C26.1,76.8,11.5,78.9,-1.9,81.9C-15.3,84.8,-27.7,88.6,-39.9,85.5C-52.1,82.3,-64.1,72.1,-71.5,59.1C-78.8,46.1,-81.6,30.3,-82.5,15.2C-83.4,0.1,-82.4,-14.3,-77.7,-27.4C-73,-40.5,-64.5,-52.3,-53.1,-60.1C-41.6,-67.9,-27.1,-71.7,-13.5,-71.6C0.1,-71.5,13.7,-67.6,28.3,-77.5C42.9,-87.3,28.3,-77.5,41.3,-70.9Z" transform="translate(100 100)" />
+        </svg>
     </div>
 </div>
 
-<!-- Add this near the top of the page, perhaps after the hero section -->
-<div class="bg-white py-4 border-bottom">
-    <div class="container">
-        <div class="d-flex justify-content-end">
-            <a href="{{ route('feeds.index') }}" class="btn btn-sm btn-outline-danger" target="_blank">
-                <i class="bi bi-rss"></i> Subscribe to RSS Feed
-            </a>
-        </div>
+<!-- RSS Feed Subscribe -->
+<div class="container mb-5">
+    <div class="d-flex justify-content-end">
+        <a href="{{ route('feeds.list') }}" class="btn btn-outline-primary">
+            <i class="fas fa-rss me-2"></i>Subscribe to RSS Feeds
+        </a>
     </div>
 </div>
 
 <!-- Popular Categories Section -->
-<div class="bg-gray-50 py-10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center">
-            <h2 class="text-3xl tracking-tight font-extrabold text-gray-900 sm:text-4xl">
-                Popular Categories
-            </h2>
-            <p class="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
-                Browse posts by your favorite topics
-            </p>
-        </div>
+<div class="container mb-5">
+    <div class="text-center mb-4">
+        <h2 class="display-5 fw-bold">Popular Categories</h2>
+        <p class="lead text-muted">Browse posts by your favorite topics</p>
+    </div>
 
-        <div class="mt-8">
-            <div class="flex flex-wrap justify-center gap-4">
-                @foreach($popularCategories as $category)
-                <a href="{{ route('categories.show', $category) }}" 
-                   class="mb-2 inline-flex items-center px-5 py-2.5 rounded-full text-sm font-medium 
-                          {{ $category->posts_count > 10 ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200' }}">
-                    {{ $category->name }}
-                    <span class="ml-2 {{ $category->posts_count > 10 ? 'bg-indigo-800' : 'bg-indigo-200' }} rounded-full px-2 py-1 text-xs">
-                        {{ $category->posts_count }}
-                    </span>
-                </a>
-                @endforeach
-            </div>
-        </div>
-        
-        <div class="mt-8 text-center">
-            <a href="{{ route('categories.index') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200">
-                View All Categories
-                <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-            </a>
-        </div>
+    <div class="d-flex flex-wrap justify-content-center gap-2 mb-4">
+        @foreach($popularCategories as $category)
+        <a href="{{ route('categories.show', $category) }}" 
+           class="badge rounded-pill fs-6 text-decoration-none py-2 px-3 
+                  {{ $category->posts_count > 10 ? 'bg-primary text-white' : 'bg-light text-primary' }}">
+            {{ $category->name }}
+            <span class="badge {{ $category->posts_count > 10 ? 'bg-white text-primary' : 'bg-primary text-white' }} rounded-pill ms-2">
+                {{ $category->posts_count }}
+            </span>
+        </a>
+        @endforeach
+    </div>
+    
+    <div class="text-center">
+        <a href="{{ route('categories.index') }}" class="btn btn-outline-primary">
+            View All Categories <i class="fas fa-arrow-right ms-2"></i>
+        </a>
     </div>
 </div>
 
 <!-- Featured Posts Section -->
-<div class="bg-white py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center">
-            <h2 class="text-3xl tracking-tight font-extrabold text-gray-900 sm:text-4xl">
-                Featured Posts
-            </h2>
-            <p class="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
-                Check out our latest and most popular blog posts
-            </p>
+<div class="bg-light py-5 mb-5">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h2 class="display-5 fw-bold">Featured Posts</h2>
+            <p class="lead text-muted">Check out our latest and most popular blog posts</p>
         </div>
 
-        <div class="mt-12 grid gap-5 max-w-lg mx-auto lg:grid-cols-3 lg:max-w-none">
+        <div class="row g-4">
             @foreach($featuredPosts as $post)
-            <div class="flex flex-col rounded-lg shadow-lg overflow-hidden">
-                @if($post->image)
-                <div class="flex-shrink-0">
-                    <img class="h-48 w-full object-cover" src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}">
-                </div>
-                @endif
-                <div class="flex-1 bg-white p-6 flex flex-col justify-between">
-                    <div class="flex-1">
-                        <p class="text-sm font-medium text-indigo-600">
-                            <a href="{{ route('categories.show', $post->category) }}" class="hover:underline">
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    @if($post->image_path)
+                    <img src="{{ asset('storage/' . $post->image_path) }}" class="card-img-top" alt="{{ $post->title }}" style="height: 200px; object-fit: cover;">
+                    @else
+                    <div class="bg-secondary bg-opacity-25 d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="fas fa-image fa-3x text-secondary opacity-50"></i>
+                    </div>
+                    @endif
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <a href="{{ route('categories.show', $post->category) }}" class="badge bg-primary text-decoration-none">
                                 {{ $post->category->name }}
                             </a>
-                        </p>
-                        <a href="{{ route('posts.show', $post) }}" class="block mt-2">
-                            <p class="text-xl font-semibold text-gray-900">{{ $post->title }}</p>
-                            <p class="mt-3 text-base text-gray-500">{{ Str::limit(strip_tags($post->content), 150) }}</p>
-                        </a>
+                            <small class="text-muted">{{ $post->created_at->diffForHumans() }}</small>
+                        </div>
+                        <h5 class="card-title">{{ $post->title }}</h5>
+                        <p class="card-text text-muted">{{ Str::limit(strip_tags($post->content), 120) }}</p>
                     </div>
-                    <div class="mt-6 flex items-center justify-between">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                <span class="sr-only">{{ $post->user->name }}</span>
-                                <div class="h-10 w-10 rounded-full bg-indigo-600 flex items-center justify-center">
-                                    <span class="text-white font-bold">{{ substr($post->user->name, 0, 1) }}</span>
+                    <div class="card-footer bg-white border-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                @if($post->user->avatar_path)
+                                <img src="{{ asset('storage/' . $post->user->avatar_path) }}" alt="{{ $post->user->name }}" class="rounded-circle me-2" width="30" height="30">
+                                @else
+                                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 30px; height: 30px;">
+                                    {{ strtoupper(substr($post->user->name, 0, 1)) }}
                                 </div>
+                                @endif
+                                <span class="small">{{ $post->user->name }}</span>
                             </div>
-                            <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900">
-                                    {{ $post->user->name }}
-                                </p>
-                                <div class="flex space-x-1 text-sm text-gray-500">
-                                    <time datetime="{{ $post->created_at->toISOString() }}">
-                                        {{ $post->created_at->diffForHumans() }}
-                                    </time>
-                                </div>
+                            <div>
+                                <span class="me-2" title="Comments"><i class="fas fa-comment text-secondary"></i> {{ $post->comments_count ?? 0 }}</span>
+                                <span title="Likes"><i class="fas fa-heart text-danger"></i> {{ $post->likes_count ?? 0 }}</span>
                             </div>
                         </div>
-                        <div class="flex items-center text-sm text-gray-500">
-                            <span class="mr-2">
-                                <i class="bi bi-chat-text"></i> {{ $post->comments_count }}
-                            </span>
-                            <span>
-                                <i class="bi bi-heart"></i> {{ $post->likes_count }}
-                            </span>
-                        </div>
+                        <a href="{{ route('posts.show', $post) }}" class="btn btn-primary w-100 mt-3">Read More</a>
                     </div>
                 </div>
             </div>
@@ -157,105 +131,125 @@
 </div>
 
 <!-- Most Popular Posts Section -->
-<div class="bg-gray-50 py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center">
-            <h2 class="text-3xl tracking-tight font-extrabold text-gray-900 sm:text-4xl">
-                Most Popular Posts
-            </h2>
-            <p class="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
-                Trending content with the most engagement
-            </p>
-        </div>
+<div class="container mb-5">
+    <div class="text-center mb-4">
+        <h2 class="display-5 fw-bold">Most Popular Posts</h2>
+        <p class="lead text-muted">Trending content with the most engagement</p>
+    </div>
 
-        <div class="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
-            @foreach($popularPosts as $post)
-            <div class="flex flex-col rounded-lg shadow-lg overflow-hidden">
-                @if($post->image)
-                <div class="flex-shrink-0">
-                    <img class="h-48 w-full object-cover" src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}">
+    <div class="row g-4">
+        @foreach($popularPosts as $post)
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100">
+                <div class="card-header bg-white border-0 pt-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{{ route('categories.show', $post->category) }}" class="badge bg-primary text-decoration-none">
+                            {{ $post->category->name }}
+                        </a>
+                        <span class="badge bg-warning text-dark">
+                            <i class="fas fa-chart-line me-1"></i> Popular
+                        </span>
+                    </div>
+                </div>
+                @if($post->image_path)
+                <img src="{{ asset('storage/' . $post->image_path) }}" class="card-img-top" alt="{{ $post->title }}" style="height: 200px; object-fit: cover;">
+                @else
+                <div class="bg-secondary bg-opacity-25 d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <i class="fas fa-image fa-3x text-secondary opacity-50"></i>
                 </div>
                 @endif
-                <div class="flex-1 bg-white p-6 flex flex-col justify-between">
-                    <div class="flex-1">
-                        <div class="flex justify-between items-center">
-                            <p class="text-sm font-medium text-indigo-600">
-                                <a href="{{ route('categories.show', $post->category) }}" class="hover:underline">
-                                    {{ $post->category->name }}
-                                </a>
-                            </p>
-                            <div class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                                </svg>
-                                Popular
-                            </div>
-                        </div>
-                        <a href="{{ route('posts.show', $post) }}" class="block mt-2">
-                            <p class="text-xl font-semibold text-gray-900">{{ $post->title }}</p>
-                            <p class="mt-3 text-base text-gray-500">{{ Str::limit(strip_tags($post->content), 100) }}</p>
-                        </a>
-                    </div>
-                    <div class="mt-6 flex items-center justify-between">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                <span class="sr-only">{{ $post->user->name }}</span>
-                                <div class="h-10 w-10 rounded-full bg-indigo-600 flex items-center justify-center">
-                                    <span class="text-white font-bold">{{ substr($post->user->name, 0, 1) }}</span>
-                                </div>
-                            </div>
-                            <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900">
-                                    {{ $post->user->name }}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex items-center text-sm text-gray-500 space-x-2">
-                            <span class="flex items-center">
-                                <i class="bi bi-chat-text mr-1"></i> {{ $post->comments_count }}
-                            </span>
-                            <span class="flex items-center">
-                                <i class="bi bi-heart mr-1"></i> {{ $post->likes_count }}
-                            </span>
-                        </div>
-                    </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ $post->title }}</h5>
+                    <p class="card-text text-muted">{{ Str::limit(strip_tags($post->content), 100) }}</p>
                 </div>
+                <div class="card-footer bg-white border-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            @if($post->user->avatar_path)
+                            <img src="{{ asset('storage/' . $post->user->avatar_path) }}" alt="{{ $post->user->name }}" class="rounded-circle me-2" width="30" height="30">
+                            @else
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 30px; height: 30px;">
+                                {{ strtoupper(substr($post->user->name, 0, 1)) }}
+                            </div>
+                            @endif
+                            <span class="small">{{ $post->user->name }}</span>
+                        </div>
+                        <div>
+                            <span class="me-2" title="Comments"><i class="fas fa-comment text-secondary"></i> {{ $post->comments_count ?? 0 }}</span>
+                            <span title="Likes"><i class="fas fa-heart text-danger"></i> {{ $post->likes_count ?? 0 }}</span>
+                        </div>
+                    </div>
+                    <a href="{{ route('posts.show', $post) }}" class="btn btn-outline-primary w-100 mt-3">Read More</a>
+                </div>
+            </div>
+        </div>
+        @endforeach
+    </div>
+</div>
+
+<!-- Categories Browser Section -->
+<div class="bg-light py-5">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h2 class="display-5 fw-bold">Browse All Categories</h2>
+            <p class="lead text-muted">Find content that matches your interests</p>
+        </div>
+
+        <div class="row g-4">
+            @foreach($allCategories as $category)
+            <div class="col-md-6 col-lg-3">
+                <a href="{{ route('categories.show', $category) }}" class="text-decoration-none">
+                    <div class="card h-100 border-0 shadow-sm transition-all hover-lift">
+                        <div class="card-body">
+                            <h3 class="h5 card-title text-primary">{{ $category->name }}</h3>
+                            <p class="card-text text-muted small">{{ Str::limit($category->description ?? 'Explore posts in this category', 60) }}</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="badge bg-light text-primary">{{ $category->posts_count ?? 0 }} posts</span>
+                                <i class="fas fa-arrow-right text-primary"></i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
             </div>
             @endforeach
         </div>
     </div>
 </div>
 
-<!-- Categories Browser Section -->
-<div class="bg-white py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center">
-            <h2 class="text-3xl tracking-tight font-extrabold text-gray-900 sm:text-4xl">
-                Browse All Categories
-            </h2>
-            <p class="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
-                Find content that matches your interests
-            </p>
-        </div>
-
-        <div class="mt-10 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
-            @foreach($allCategories as $category)
-            <a href="{{ route('categories.show', $category) }}" class="group">
-                <div class="bg-gray-50 rounded-lg p-6 hover:bg-indigo-50 transition duration-300">
-                    <h3 class="text-lg font-medium text-gray-900 group-hover:text-indigo-600">{{ $category->name }}</h3>
-                    <p class="mt-2 text-sm text-gray-500">{{ Str::limit($category->description, 60) }}</p>
-                    <div class="mt-4 flex items-center justify-between">
-                        <span class="text-sm font-medium text-indigo-600">{{ $category->posts_count }} posts</span>
-                        <span class="text-indigo-500 group-hover:translate-x-1 transition-transform duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                            </svg>
-                        </span>
+<!-- Call to Action -->
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card bg-primary text-white p-4 p-md-5 border-0 shadow">
+                <div class="row align-items-center">
+                    <div class="col-md-8 mb-4 mb-md-0">
+                        <h2 class="h1 fw-bold">Start Writing Today</h2>
+                        <p class="lead mb-0">Join our community and share your stories, ideas, and expertise with readers around the world.</p>
+                    </div>
+                    <div class="col-md-4 text-md-end">
+                        @auth
+                            <a href="{{ route('posts.create') }}" class="btn btn-light btn-lg">Create Post</a>
+                        @else
+                            <a href="{{ route('register') }}" class="btn btn-light btn-lg">Sign Up</a>
+                        @endauth
                     </div>
                 </div>
-            </a>
-            @endforeach
+            </div>
         </div>
     </div>
 </div>
+@endsection
+
+@section('styles')
+<style>
+    .hover-lift {
+        transition: all 0.2s ease;
+    }
+    .hover-lift:hover {
+        transform: translateY(-5px);
+    }
+    .transition-all {
+        transition: all 0.2s ease;
+    }
+</style>
 @endsection 

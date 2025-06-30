@@ -4,21 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-<<<<<<< HEAD
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-
-class CategoryController extends Controller
-{
-    public function index()
-    {
-        $categories = Category::latest()->paginate(10);
-        return view('admin.categories.index', compact('categories'));
-    }
-=======
 use App\Models\Post;
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
@@ -130,7 +119,6 @@ class CategoryController extends Controller
             'categoryNames'
         ));
     }
->>>>>>> 8a6da4b03aeac32a4b758e6312add93c0e689c94
 
     public function create()
     {
@@ -139,30 +127,17 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-<<<<<<< HEAD
-        $request->validate([
-            'name' => 'required|string|max:255|unique:categories',
-            'description' => 'nullable|string',
-        ]);
-
-        Category::create([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
-            'description' => $request->description,
-        ]);
-
-        return redirect()->route('admin.categories.index')->with('success', 'Category created successfully');
-=======
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:categories',
             'description' => 'nullable|string|max:1000',
         ]);
 
+        $validated['slug'] = Str::slug($request->name);
+        
         Category::create($validated);
 
         return redirect()->route('admin.categories.index')
             ->with('success', 'Category created successfully.');
->>>>>>> 8a6da4b03aeac32a4b758e6312add93c0e689c94
     }
 
     public function edit(Category $category)
@@ -172,38 +147,21 @@ class CategoryController extends Controller
 
     public function update(Request $request, Category $category)
     {
-<<<<<<< HEAD
-        $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
-            'description' => 'nullable|string',
-        ]);
-
-        $category->update([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
-            'description' => $request->description,
-        ]);
-
-        return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully');
-=======
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
             'description' => 'nullable|string|max:1000',
         ]);
 
+        $validated['slug'] = Str::slug($request->name);
+        
         $category->update($validated);
 
         return redirect()->route('admin.categories.index')
             ->with('success', 'Category updated successfully.');
->>>>>>> 8a6da4b03aeac32a4b758e6312add93c0e689c94
     }
 
     public function destroy(Category $category)
     {
-<<<<<<< HEAD
-        $category->delete();
-        return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully');
-=======
         // Update posts that use this category to set category_id to null
         $category->posts()->update(['category_id' => null]);
         
@@ -211,6 +169,5 @@ class CategoryController extends Controller
 
         return redirect()->route('admin.categories.index')
             ->with('success', 'Category deleted successfully.');
->>>>>>> 8a6da4b03aeac32a4b758e6312add93c0e689c94
     }
 } 
