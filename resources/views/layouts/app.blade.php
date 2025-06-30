@@ -26,6 +26,13 @@
             color: #6c757d;
         }
     </style>
+    <!-- RSS Feed Links -->
+    <link rel="alternate" type="application/rss+xml" title="{{ config('app.name') }} - All Posts" href="{{ route('feeds.index') }}" />
+    
+    @if(isset($category) && $category instanceof \App\Models\Category)
+    <link rel="alternate" type="application/rss+xml" title="{{ config('app.name') }} - {{ $category->name }}" href="{{ route('feeds.category', $category) }}" />
+    @endif
+    
     @yield('styles')
 </head>
 <body>
